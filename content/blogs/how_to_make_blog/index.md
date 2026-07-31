@@ -1,5 +1,6 @@
 ---
 title: "How to make a blog!"
+commentsId: "Blogs: How to make a blog!"
 summary: "Details on how to make a blog similar to this one and my journey getting here!"
 description: "Details on how to make a blog similar to this one and my journey getting here!"
 

@@ -5,6 +5,7 @@ build:
   list: never
 
 title: ""
+commentsId: "" # "Section: Post Title" — set once, never change, even if title/URL change
 summary: ""
 description: ""
 
