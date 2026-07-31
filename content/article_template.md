@@ -1,4 +1,9 @@
 ---
+# template only — _build keeps this out of the published site
+_build:
+  render: never
+  list: never
+
 title: ""
 summary: ""
 description: ""
