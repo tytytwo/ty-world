@@ -1,6 +1,6 @@
 ---
 # template only — _build keeps this out of the published site
-_build:
+build:
   render: never
   list: never
 
