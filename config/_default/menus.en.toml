@@ -61,7 +61,7 @@ weight = 2
 [[subnavigation]]
 name = "Source"
 pre = "github"
-url = "https://github.com/pacman-ty/ty-world"
+url = "https://github.com/tytytwo/ty-world"
 weight = 3
 
 # [[subnavigation]]
