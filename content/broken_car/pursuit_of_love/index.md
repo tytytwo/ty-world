@@ -7,8 +7,7 @@ description: "Maybe we are a well waiting for someone to see themselves in us an
 draft: false
 date: 2024-06-30 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["love", "rambling"]
 #series: []
 # series\_order: 
 

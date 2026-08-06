@@ -7,8 +7,7 @@ description: "Kitten cybrog"
 draft: false
 date: 2025-01-20 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["poetry", "technology"]
 #series: []
 # series\_order: 
 

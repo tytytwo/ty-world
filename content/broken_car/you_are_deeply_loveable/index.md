@@ -7,8 +7,7 @@ description: "You are deeply loveable"
 draft: false
 date: 2024-06-16 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["love", "rambling"]
 #series: []
 # series\_order: 
 

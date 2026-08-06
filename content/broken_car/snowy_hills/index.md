@@ -7,8 +7,7 @@ description: "A blank slate"
 draft: false
 date: 2025-03-14 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["quotes", "yearning"]
 #series: []
 # series\_order: 
 

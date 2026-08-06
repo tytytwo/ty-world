@@ -5,8 +5,7 @@ date: 2025-03-31
 summary: "A dialectical interpretation of William Shakespeares Edmund in King Lear"
 description: "A dialectical interpretation of William Shakespeares Edmund in King Lear"
 
-categories: [essays]
-tags: [Shakespeare]
+tags: ["shakespeare", "philosophy", "literature", "suffering"]
 
 authors:
   - talha

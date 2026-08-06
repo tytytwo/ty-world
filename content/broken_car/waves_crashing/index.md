@@ -7,7 +7,6 @@ description: "Thundering roar of crashing waves silence me"
 draft: false
 date: 2024-12-30 # follow the Y/M/D format 
 
-categories: [car]
 # tags: []
 #series: []
 # series\_order: 

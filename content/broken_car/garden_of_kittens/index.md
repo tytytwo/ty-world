@@ -7,8 +7,7 @@ description: "What a beaitful thing to think of"
 draft: false
 date: 2024-07-01 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["quotes"]
 #series: []
 # series\_order: 
 

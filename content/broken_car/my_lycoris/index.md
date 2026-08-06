@@ -7,8 +7,7 @@ description: "Let me spend a moment by your side, thats all I ask"
 draft: false
 date: 2024-11-09 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["literature", "virgil", "poetry", "love", "yearning"]
 #series: []
 # series\_order: 
 

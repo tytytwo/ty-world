@@ -7,8 +7,7 @@ description: "Somehow not too bad."
 draft: false
 date: 2025-02-14 # follow the Y/M/D format 
 
-categories: [photography]
-# tags: []
+tags: ["film", "minolta hi matic af", "kodak gold 200", "burlington"]
 #series: []
 # series\_order: 
 

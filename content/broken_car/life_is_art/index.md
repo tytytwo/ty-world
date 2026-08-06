@@ -7,8 +7,7 @@ description: "The value of art and self"
 draft: false
 date: 2024-06-23 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["philosophy", "art", "nietzsche"]
 #series: []
 # series\_order: 
 

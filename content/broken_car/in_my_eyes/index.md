@@ -7,8 +7,7 @@ description: "Tell me"
 draft: false
 date: 2025-02-10 # follow the Y/M/D format 
 
-categories: [car]
-tags: [turkish]
+tags: ["turkish", "poetry", "love"]
 #series: []
 # series\_order: 
 

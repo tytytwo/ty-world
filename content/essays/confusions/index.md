@@ -5,8 +5,7 @@ date: 2025-03-31
 summary: "Temparory summary"
 description: ""
 
-categories: [essays]
-# tags: []
+tags: ["philosophy", "literature", "nietzsche"]
 
 authors:
   - omar

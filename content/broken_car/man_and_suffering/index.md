@@ -7,8 +7,7 @@ description: "A complicated relationship"
 draft: false
 date: 2024-07-21 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["literature", "dostoevsky", "quotes", "philosophy", "suffering"]
 #series: []
 # series\_order: 
 

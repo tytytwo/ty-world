@@ -7,7 +7,6 @@ description: "Probably not"
 draft: false
 date: 2024-07-20 # follow the Y/M/D format 
 
-categories: [car]
 # tags: []
 #series: []
 # series\_order: 
