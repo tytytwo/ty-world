@@ -3,9 +3,11 @@
     "image" : "img/talha_pfp.png",
     "bio": "A little bit of this and a little bit of that type of person.",
     "social": [
+      { "github": "https://github.com/tytytwo" },
+      { "linkedin": "https://www.linkedin.com/in/talha-yildirimm/" },
       { "spotify": "https://open.spotify.com/user/efkep0xtgnbczk72wiyhtlcnt" },
+      { "letterboxd": "https://letterboxd.com/tytytwo/" },
       { "youtube": "https://www.youtube.com/@_TheBlindLeadingTheBlind" },
-      { "linkedin": "https://linkedin.com/in/talha-yildirimm" },
-      { "github": "https://github.com/tytytwo" }
+      { "reddit": "https://www.reddit.com/user/tytytwoo/" }
     ]
 }
