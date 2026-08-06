@@ -18,8 +18,8 @@ showWordCount : false
 showSummary : false
 sharingLinks : false
 showRelatedContent: false
-showEdit: false
-layoutBackgroundHeaderSpace: false
+showEdit: true
+layoutBackgroundHeaderSpace: true
 excludeFromRelated: true
 ---
 
