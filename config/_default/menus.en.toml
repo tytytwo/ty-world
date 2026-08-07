@@ -46,28 +46,30 @@ name = "Portfolio"
 url = "https://ty-world.vercel.app/"
 weight = 6
 
-[[main]]
+[[subnavigation]]
 name = "Guestbook"
+pre = "heart"
 pageRef = "guestbook"
-weight = 7
+weight = 1
 
 [[subnavigation]]
 name = "Broken Car"
 pre = "paw1"
 pageRef = "broken_car"
-weight = 1
+weight = 2
 
 [[subnavigation]]
 name = "The Blind Leading the Blind"
 pre = "youtube"
 pageRef = "blb"
-weight = 2
+weight = 3
 
 [[subnavigation]]
 name = "Source"
 pre = "github"
 url = "https://github.com/tytytwo/ty-world"
-weight = 3
+weight = 4
+
 
 # [[subnavigation]]
 # name = "LinkedIn"

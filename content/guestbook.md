@@ -12,6 +12,8 @@ sharingLinks: false
 showTableOfContents: false
 showPagination: false
 showRelatedContent: false
+showEdit: false
+layoutBackgroundHeaderSpace: false
 ---
 
 Leave a note — a hello, a song, some love.

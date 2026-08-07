@@ -5,9 +5,6 @@
   <label>Your name
     <input name="name" required maxlength="40">
   </label>
-  <label>Your URL
-    <input name="url" maxlength="200" placeholder="optional">
-  </label>
   <label>Style
     <select name="style">
       <option value="plain">plain</option>
@@ -38,13 +35,8 @@
       msg.className = "gb-message";
       msg.textContent = e.message;
 
-      const who = e.url ? document.createElement("a") : document.createElement("span");
+      const who = document.createElement("span");
       who.textContent = e.name;
-      if (e.url) {
-        who.href = e.url;
-        who.rel = "nofollow noopener";
-        who.target = "_blank";
-      }
 
       const when = document.createElement("time");
       when.dateTime = e.created_at;
