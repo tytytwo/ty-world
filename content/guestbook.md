@@ -14,6 +14,6 @@ showPagination: false
 showRelatedContent: false
 ---
 
-Leave a note — a hello, a song, whatever.
+Leave a note — a hello, a song, some love.
 
 {{< guestbook >}}
