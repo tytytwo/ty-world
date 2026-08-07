@@ -1,5 +1,12 @@
 /* -- Guestbook -- */
 
+/* One source of truth for layout width and card width, shared by the
+   composer, the preview card and the entry grid so sizes always match. */
+:root {
+  --gb-w: min(64rem, 92vw);
+  --gb-card: calc((var(--gb-w) - 2rem) / 3);
+}
+
 /* Honeypot: offscreen but present in the DOM (bots skip display:none more often) */
 .gb-hp {
   position: absolute;
@@ -24,6 +31,13 @@
   color: inherit;
 }
 
+/* Fixed box: never grows, never drag-resizes — long text scrolls inside it */
+.gb-form textarea {
+  height: 7rem;
+  resize: none;
+  overflow-y: auto;
+}
+
 .gb-form button {
   margin-top: 0.5rem;
   padding: 0.4rem 1rem;
@@ -32,25 +46,142 @@
   cursor: pointer;
 }
 
+/* Composer: form and live preview side by side, stacking on narrow screens.
+   Preview column is exactly one card wide; the form takes the rest. */
+.gb-composer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--gb-card);
+  gap: 1.5rem;
+  align-items: start;
+  margin-bottom: 2rem;
+}
+
+.gb-preview-label {
+  font-size: 0.85em;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0.5rem 0;
+}
+
+/* Preview card: single column, sized like a real grid card and held there */
+.gb-entries.gb-preview-list {
+  grid-template-columns: 1fr;
+}
+
+.gb-preview-list .gb-entry {
+  width: var(--gb-card);
+  max-width: 100%;
+}
+
+/* Composer, entries and pager all break out of the narrow article text column */
+.gb-composer,
+#gb-entries,
+#gb-pager {
+  width: var(--gb-w);
+  margin-left: calc(50% - var(--gb-w) / 2);
+}
+
+/* Entries: 3 columns × 4 rows per 12-entry page */
 .gb-entries {
   list-style: none;
   padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  align-items: start;
 }
 
+@media (max-width: 64rem) {
+  :root {
+    --gb-card: calc((var(--gb-w) - 1rem) / 2);
+  }
+
+  .gb-entries {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gb-composer {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 36rem) {
+  :root {
+    --gb-card: var(--gb-w);
+  }
+
+  .gb-entries {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Fixed-size card: same box for every entry, byline pinned to the bottom */
 .gb-entry {
   padding: 1rem;
-  margin: 0.75rem 0;
+  margin: 0;
   border-radius: 0.5rem;
+  overflow-wrap: anywhere;
+  height: 11.25rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
+.gb-pager {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin: 1.5rem 0;
+}
+
+.gb-pager button {
+  padding: 0.3rem 0.8rem;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.gb-pager button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Message area always claims the same space, so the byline never moves */
 .gb-message {
-  margin: 0 0 0.5rem;
+  margin: 0;
   white-space: pre-wrap;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  overflow: hidden;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .gb-meta {
-  font-size: 0.85em;
+  flex: 0 0 auto;
+  padding-top: 0.5rem;
+  font-size: 0.8em;
   opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gb-count {
+  display: block;
+  font-size: 0.75em;
+  opacity: 0.6;
+  text-align: right;
+  max-width: 28rem;
+  font-variant-numeric: tabular-nums;
 }
 
 .gb-style-plain {
@@ -71,4 +202,100 @@
 .gb-style-sunset {
   background: linear-gradient(135deg, #ff9966, #ff5e62);
   color: #fff;
+}
+
+.gb-style-ocean {
+  background: linear-gradient(160deg, #0b3d5c, #041f33);
+  color: #bfe6ff;
+}
+
+.gb-style-lavender {
+  background: #e6dff5;
+  color: #3d2e5c;
+}
+
+.gb-style-paper {
+  background: #fdf6e3;
+  color: #4a3f2a;
+  border: 1px dashed #b5a67e;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.gb-style-neon {
+  background: #0a0a12;
+  color: #00f0ff;
+  border: 1px solid #00f0ff;
+  text-shadow: 0 0 6px rgba(0, 240, 255, 0.6);
+}
+
+.gb-style-matcha {
+  background: #dce8d4;
+  color: #2f4526;
+}
+
+/* Vibe styles: typography + texture, not just colors */
+
+.gb-style-sticky {
+  background: #fef3a0;
+  color: #4a3b00;
+  font-family: "Comic Sans MS", "Segoe Print", cursive;
+  transform: rotate(-1.5deg);
+  box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.25);
+  border-radius: 0;
+}
+
+.gb-style-postcard {
+  background: #fffdf7;
+  color: #2b3a55;
+  font-family: "Segoe Script", "Comic Sans MS", cursive;
+  border: 6px solid;
+  border-image: repeating-linear-gradient(
+      45deg,
+      #c94040 0 10px,
+      #fffdf7 10px 20px,
+      #3a5da8 20px 30px
+    )
+    6;
+  border-radius: 0;
+}
+
+.gb-style-win95 {
+  background: #c0c0c0;
+  color: #000;
+  font-family: Tahoma, "MS Sans Serif", sans-serif;
+  border-style: outset;
+  border-width: 2px;
+  border-color: #fff #808080 #808080 #fff;
+  border-radius: 0;
+}
+
+.gb-style-newsprint {
+  background: #f4f1e8;
+  color: #1a1a1a;
+  font-family: Georgia, "Times New Roman", serif;
+  border-top: 3px double #1a1a1a;
+  border-bottom: 3px double #1a1a1a;
+  border-radius: 0;
+}
+
+.gb-style-newsprint .gb-message::first-letter {
+  float: left;
+  font-size: 2.6em;
+  line-height: 0.8;
+  padding-right: 0.1em;
+  font-weight: bold;
+}
+
+.gb-style-blueprint {
+  background: #10305e;
+  background-image: repeating-linear-gradient(
+      0deg,
+      rgba(160, 200, 255, 0.15) 0 1px,
+      transparent 1px 1rem
+    ),
+    repeating-linear-gradient(90deg, rgba(160, 200, 255, 0.15) 0 1px, transparent 1px 1rem);
+  color: #d6e8ff;
+  font-family: monospace;
+  border: 1px dashed rgba(214, 232, 255, 0.6);
+  border-radius: 0;
 }
