@@ -1,0 +1,3 @@
+name = "guestbook"
+main = "src/index.js"
+compatability_date = "2026-08-07"
