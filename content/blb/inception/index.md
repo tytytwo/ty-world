@@ -7,8 +7,7 @@ description: "Just me. Not fancy. Not polished."
 draft: false
 date: 2024-11-09 # follow the Y/M/D format 
 
-categories: [blb]
-# tags: []
+tags: ["rambling"]
 #series: []
 # series\_order: 
 

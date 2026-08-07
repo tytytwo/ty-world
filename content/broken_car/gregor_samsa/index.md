@@ -7,8 +7,7 @@ description: "Was he an animal, that music could move him so?"
 draft: false
 date: 2025-01-13 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["literature", "kafka", "quotes"]
 #series: []
 # series\_order: 
 

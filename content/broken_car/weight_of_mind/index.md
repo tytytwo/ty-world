@@ -7,8 +7,7 @@ description: "Guilty or not I languish"
 draft: false
 date: 2024-10-09 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["poetry", "suffering"]
 #series: []
 # series\_order: 
 

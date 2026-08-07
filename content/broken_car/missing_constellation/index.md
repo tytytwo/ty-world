@@ -7,8 +7,7 @@ description: "I stay searching"
 draft: false
 date: 2024-07-24 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["poetry", "love", "yearning", "suffering"]
 #series: []
 # series\_order: 
 

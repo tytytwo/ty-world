@@ -7,8 +7,7 @@ description: "Sometimes you just need to know where to look"
 draft: false
 date: 2024-08-25 # follow the Y/M/D format 
 
-categories: [car]
-tags: [Turkish]
+tags: ["turkish", "poetry", "lonely"]
 #series: []
 # series\_order: 
 

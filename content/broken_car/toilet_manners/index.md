@@ -7,8 +7,7 @@ description: "Supposedly civilized or cleansed of our innocence?"
 draft: false
 date: 2024-11-11 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["literature", "remarque", "quotes"]
 #series: []
 # series\_order: 
 

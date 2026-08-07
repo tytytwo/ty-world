@@ -7,8 +7,7 @@ description: "🐘🐘"
 draft: false
 date: 2025-02-14 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["rambling"]
 #series: []
 # series\_order: 
 

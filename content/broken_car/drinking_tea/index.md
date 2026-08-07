@@ -7,8 +7,7 @@ description: "Lets sit and make time"
 draft: false
 date: 2024-08-14 # follow the Y/M/D format 
 
-categories: [car]
-tags: [turkish]
+tags: ["turkish", "poetry", "love"]
 #series: []
 # series\_order: 
 

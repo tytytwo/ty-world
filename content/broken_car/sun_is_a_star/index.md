@@ -7,8 +7,7 @@ description: "Mind blowing fact"
 draft: false
 date: 2024-06-18 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["quotes"]
 #series: []
 # series\_order: 
 

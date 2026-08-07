@@ -7,8 +7,7 @@ description: "Through thick and thin"
 draft: false
 date: 2024-07-17 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["philosophy", "existentialism"]
 #series: []
 # series\_order: 
 

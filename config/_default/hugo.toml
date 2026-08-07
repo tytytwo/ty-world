@@ -26,7 +26,6 @@ anchor = 'Center'
 
 [taxonomies]
 tag = "tags"
-category = "categories"
 author = "authors"
 series = "series"
 
@@ -45,10 +44,6 @@ toLower = true      # Convert terms to lowercase for comparison (makes matching 
 
 [[related.indices]]
 name = "tags"
-weight = 100
-
-[[related.indices]]
-name = "categories"
 weight = 100
 
 [[related.indices]]

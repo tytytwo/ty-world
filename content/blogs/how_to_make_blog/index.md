@@ -7,8 +7,7 @@ description: "Details on how to make a blog similar to this one and my journey g
 draft: true
 date: 2025-05-27 # follow the Y/M/D format 
 
-categories: [blog]
-tags: [guide, tech]
+tags: ["guide", "tech"]
 # series: []
 # series\_order: 
 

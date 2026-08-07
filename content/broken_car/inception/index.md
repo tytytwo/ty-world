@@ -7,7 +7,6 @@ description: "Inception."
 draft: false
 date: 2024-06-13 # follow the Y/M/D format 
 
-categories: [car]
 # tags: []
 #series: []
 # series\_order: 

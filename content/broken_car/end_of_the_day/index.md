@@ -7,8 +7,7 @@ description: "Sometimes there really is nothing where nothing is"
 draft: false
 date: 2024-06-19 # follow the Y/M/D format 
 
-categories: [car]
-# tags: []
+tags: ["quotes"]
 #series: []
 # series\_order: 
 

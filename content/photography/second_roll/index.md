@@ -7,8 +7,7 @@ description: "Still feeling things out."
 draft: false
 date: 2025-02-26 # follow the Y/M/D format 
 
-categories: [photography]
-# tags: []
+tags: ["film", "minolta hi matic af", "kodak gold 200", "toronto", "burlington", "art"]
 #series: []
 # series\_order: 
 
