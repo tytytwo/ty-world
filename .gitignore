@@ -1,6 +1,7 @@
 #others
 node_modules
 .hugo_build.lock
+worker/.wrangler/
 
 # OS generated files
 .DS_Store

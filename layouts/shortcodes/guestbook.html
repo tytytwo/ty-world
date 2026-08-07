@@ -1,0 +1,91 @@
+<form id="gb-form" class="gb-form">
+  <label>Message
+    <textarea name="message" required maxlength="500" rows="4" placeholder="say hi..."></textarea>
+  </label>
+  <label>Your name
+    <input name="name" required maxlength="40">
+  </label>
+  <label>Your URL
+    <input name="url" maxlength="200" placeholder="optional">
+  </label>
+  <label>Style
+    <select name="style">
+      <option value="plain">plain</option>
+      <option value="pink">pink</option>
+      <option value="terminal">terminal</option>
+      <option value="sunset">sunset</option>
+    </select>
+  </label>
+  <input name="website" class="gb-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <button type="submit">Sign the guestbook</button>
+  <p id="gb-status" role="status"></p>
+</form>
+
+<ol id="gb-entries" class="gb-entries"></ol>
+
+<script>
+  (() => {
+    const API = "https://guestbook.talha-yildirim720.workers.dev";
+    const form = document.getElementById("gb-form");
+    const list = document.getElementById("gb-entries");
+    const status = document.getElementById("gb-status");
+
+    function entryNode(e) {
+      const li = document.createElement("li");
+      li.className = "gb-entry gb-style-" + e.style;
+
+      const msg = document.createElement("p");
+      msg.className = "gb-message";
+      msg.textContent = e.message;
+
+      const who = e.url ? document.createElement("a") : document.createElement("span");
+      who.textContent = e.name;
+      if (e.url) {
+        who.href = e.url;
+        who.rel = "nofollow noopener";
+        who.target = "_blank";
+      }
+
+      const when = document.createElement("time");
+      when.dateTime = e.created_at;
+      when.textContent = new Date(e.created_at).toLocaleDateString();
+
+      const meta = document.createElement("footer");
+      meta.className = "gb-meta";
+      meta.append("— ", who, " · ", when);
+
+      li.append(msg, meta);
+      return li;
+    }
+
+    async function load() {
+      try {
+        const res = await fetch(API);
+        const data = await res.json();
+        list.replaceChildren(...data.entries.map(entryNode));
+      } catch {
+        status.textContent = "couldn't load entries";
+      }
+    }
+
+    form.addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      status.textContent = "…";
+      const res = await fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+      }).catch(() => null);
+      if (res && res.ok) {
+        form.reset();
+        status.textContent = "thanks for signing!";
+        load();
+      } else {
+        const err = res ? await res.json().catch(() => ({})) : {};
+        status.textContent = err.error || "something went wrong";
+      }
+    });
+
+    load();
+  })();
+</script>

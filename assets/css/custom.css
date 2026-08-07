@@ -1,0 +1,74 @@
+/* -- Guestbook -- */
+
+/* Honeypot: offscreen but present in the DOM (bots skip display:none more often) */
+.gb-hp {
+  position: absolute;
+  left: -9999px;
+}
+
+.gb-form label {
+  display: block;
+  margin: 0.5rem 0;
+}
+
+.gb-form input,
+.gb-form textarea,
+.gb-form select {
+  display: block;
+  width: 100%;
+  max-width: 28rem;
+  padding: 0.4rem;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: inherit;
+}
+
+.gb-form button {
+  margin-top: 0.5rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.gb-entries {
+  list-style: none;
+  padding: 0;
+}
+
+.gb-entry {
+  padding: 1rem;
+  margin: 0.75rem 0;
+  border-radius: 0.5rem;
+}
+
+.gb-message {
+  margin: 0 0 0.5rem;
+  white-space: pre-wrap;
+}
+
+.gb-meta {
+  font-size: 0.85em;
+  opacity: 0.8;
+}
+
+.gb-style-plain {
+  border: 1px solid currentColor;
+}
+
+.gb-style-pink {
+  background: #ffd6e7;
+  color: #5b1533;
+}
+
+.gb-style-terminal {
+  background: #0b0f0c;
+  color: #33ff66;
+  font-family: monospace;
+}
+
+.gb-style-sunset {
+  background: linear-gradient(135deg, #ff9966, #ff5e62);
+  color: #fff;
+}
