@@ -13,3 +13,4 @@ worker/.wrangler/
 # Hugo
 public
 .comments/
+worker/.dev.vars

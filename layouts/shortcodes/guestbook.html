@@ -47,6 +47,7 @@
     const status = document.getElementById("gb-status");
     const preview = document.getElementById("gb-preview");
     const pager = document.getElementById("gb-pager");
+    let token = null;
 
     function entryNode(e) {
       const li = document.createElement("li");
@@ -112,6 +113,7 @@
       try {
         const res = await fetch(API + "?page=" + page);
         const data = await res.json();
+        token = data.token || token;
         list.replaceChildren(...data.entries.map(entryNode));
         renderPager(data.total, data.page, data.perPage);
       } catch {
@@ -127,7 +129,7 @@
       const res = await fetch(API, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        body: JSON.stringify({ ...Object.fromEntries(new FormData(form)), token }),
       }).catch(() => null);
       if (res && res.ok) {
         form.reset();
