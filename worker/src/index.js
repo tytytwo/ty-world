@@ -2,17 +2,20 @@ const STYLES = [
   "plain",
   "pink",
   "terminal",
-  "sunset",
   "ocean",
   "lavender",
   "paper",
-  "neon",
   "matcha",
   "sticky",
   "postcard",
   "win95",
   "newsprint",
   "blueprint",
+  "gameboy",
+  "polaroid",
+  "receipt",
+  "chalkboard",
+  "mixtape",
 ];
 
 const ORIGINS = ["https://ty-world.me", "http://localhost:1313"];
