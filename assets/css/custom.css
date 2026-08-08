@@ -1,10 +1,13 @@
 /* -- Guestbook -- */
 
-/* One source of truth for layout width and card width, shared by the
-   composer, the preview card and the entry grid so sizes always match. */
-:root {
-  --gb-w: min(64rem, 92vw);
-  --gb-card: calc((var(--gb-w) - 2rem) / 3);
+/* Blowfish keeps article text in a narrow prose column hugging the left edge
+   of the centred page body, so centring on the column is not centring on the
+   page. On pages with a guestbook, open the theme's two width clamps (the
+   .max-w-fit wrapper and .article-content) up to the full body width so the
+   guestbook centres on the page and scales with it. */
+article :is(.max-w-fit, .article-content):has(.gb-composer) {
+  width: 100%;
+  max-width: 100%;
 }
 
 /* Honeypot: offscreen but present in the DOM (bots skip display:none more often) */
@@ -47,10 +50,11 @@
 }
 
 /* Composer: form and live preview side by side, stacking on narrow screens.
-   Preview column is exactly one card wide; the form takes the rest. */
+   Preview column is exactly one entry-grid card wide — (100% - 2 × 1rem gap) / 3,
+   same formula as the 3-column grid below — so sizes always match. */
 .gb-composer {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) var(--gb-card);
+  grid-template-columns: minmax(0, 1fr) calc((100% - 2rem) / 3);
   gap: 1.5rem;
   align-items: start;
   margin-bottom: 2rem;
@@ -64,22 +68,17 @@
   margin: 0.5rem 0;
 }
 
-/* Preview card: single column, sized like a real grid card and held there */
+/* Preview card: single column, filling the card-sized preview pane */
 .gb-entries.gb-preview-list {
   grid-template-columns: 1fr;
 }
 
-.gb-preview-list .gb-entry {
-  width: var(--gb-card);
-  max-width: 100%;
-}
-
-/* Composer, entries and pager all break out of the narrow article text column */
+/* Composer, entries and pager share one width, centred on the page */
 .gb-composer,
 #gb-entries,
 #gb-pager {
-  width: var(--gb-w);
-  margin-left: calc(50% - var(--gb-w) / 2);
+  max-width: 64rem;
+  margin-inline: auto;
 }
 
 /* Entries: 3 columns × 4 rows per 12-entry page */
@@ -93,10 +92,6 @@
 }
 
 @media (max-width: 64rem) {
-  :root {
-    --gb-card: calc((var(--gb-w) - 1rem) / 2);
-  }
-
   .gb-entries {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -104,20 +99,30 @@
   .gb-composer {
     grid-template-columns: 1fr;
   }
+
+  /* Stacked composer: preview card sized like a 2-column entry card */
+  .gb-preview-list .gb-entry {
+    width: calc((100% - 1rem) / 2);
+  }
 }
 
 @media (max-width: 36rem) {
-  :root {
-    --gb-card: var(--gb-w);
-  }
-
   .gb-entries {
     grid-template-columns: 1fr;
   }
+
+  .gb-preview-list .gb-entry {
+    width: 100%;
+  }
 }
 
-/* Fixed-size card: same box for every entry, byline pinned to the bottom */
+/* Fixed-size card: same box for every entry, byline pinned to the bottom.
+   --gb-lines is the per-style message budget: styles that add chrome (title
+   bars, mastheads, photo frames) drop it to 4 so text never collides with
+   the byline inside the fixed box. */
 .gb-entry {
+  --gb-lines: 5;
+  position: relative;
   padding: 1rem;
   margin: 0;
   border-radius: 0.5rem;
@@ -126,6 +131,8 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  line-height: 1.5;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.14);
 }
 
 .gb-pager {
@@ -150,29 +157,54 @@
   cursor: default;
 }
 
-/* Message area always claims the same space, so the byline never moves */
+/* Message: clamped to the card's line budget. The max-height matches the
+   clamp exactly and the box never flex-grows past it — growth is what made
+   a clipped half-line paint below the ellipsis. */
 .gb-message {
   margin: 0;
   white-space: pre-wrap;
   font-size: 0.95rem;
-  line-height: 1.4;
+  line-height: 1.5;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 5;
-  line-clamp: 5;
+  -webkit-line-clamp: var(--gb-lines);
+  line-clamp: var(--gb-lines);
   overflow: hidden;
-  flex: 1 1 auto;
-  min-height: 0;
+  max-height: calc(var(--gb-lines) * 1.5em);
+  flex: 0 0 auto;
 }
 
+/* Byline: the name shrinks and ellipsizes, the date always survives */
 .gb-meta {
   flex: 0 0 auto;
+  margin-top: auto;
   padding-top: 0.5rem;
-  font-size: 0.8em;
+  font-size: 0.78rem;
+  line-height: 1.3;
   opacity: 0.8;
+  display: flex;
+  align-items: baseline;
+  gap: 0.3ch;
+  min-width: 0;
+}
+
+/* The ellipsis needs overflow:hidden, which also clips vertically — and
+   handwriting fonts (sticky, postcard, chalkboard, polaroid bylines) have
+   glyphs taller than the line box, so y/g/p/q tails got chopped. Padding
+   widens the paint window; negative margins cancel the layout impact. */
+.gb-meta span {
+  flex: 0 1 auto;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding: 0.25em 0 0.45em;
+  margin: -0.25em 0 -0.45em;
+}
+
+.gb-meta time {
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 .gb-count {
@@ -184,70 +216,137 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* -- Card styles --
+   Colour styles: refined palettes with gentle gradients and matching borders.
+   Vibe styles: typography + texture + chrome, not just colors. */
+
 .gb-style-plain {
-  border: 1px solid currentColor;
+  border: 1px solid color-mix(in srgb, currentColor 55%, transparent);
+  background: color-mix(in srgb, currentColor 6%, transparent);
 }
 
 .gb-style-pink {
-  background: #ffd6e7;
-  color: #5b1533;
+  background: linear-gradient(160deg, #ffe3ef, #ffc2da);
+  color: #641a3c;
+  border: 1px solid #f2a6c5;
+}
+
+.gb-style-pink .gb-meta::after {
+  content: "♥";
+  color: #e2568f;
 }
 
 .gb-style-terminal {
-  background: #0b0f0c;
+  background: repeating-linear-gradient(
+      0deg,
+      rgba(51, 255, 102, 0.05) 0 1px,
+      transparent 1px 3px
+    ),
+    #0a0e0b;
   color: #33ff66;
-  font-family: monospace;
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  border: 1px solid #1d4028;
+  text-shadow: 0 0 4px rgba(51, 255, 102, 0.35);
 }
 
-.gb-style-sunset {
-  background: linear-gradient(135deg, #ff9966, #ff5e62);
-  color: #fff;
+.gb-style-terminal .gb-message::before {
+  content: "$ ";
+  color: #1fbf4e;
 }
 
 .gb-style-ocean {
-  background: linear-gradient(160deg, #0b3d5c, #041f33);
-  color: #bfe6ff;
+  background: radial-gradient(ellipse 65% 32% at 18% 106%, rgba(125, 205, 255, 0.28), transparent 70%),
+    radial-gradient(ellipse 60% 28% at 78% 111%, rgba(125, 205, 255, 0.2), transparent 70%),
+    linear-gradient(168deg, #0e4a6e, #051f36);
+  color: #cfeaff;
+  border: 1px solid #1a5c82;
 }
 
 .gb-style-lavender {
-  background: #e6dff5;
-  color: #3d2e5c;
+  background: linear-gradient(165deg, #f0eafb, #dcd0f2);
+  color: #43306b;
+  border: 1px solid #bda8e3;
 }
 
+/* Ruled notebook page: baseline ruling under each message line (22.8px pitch =
+   the message's 0.95rem × 1.5 line height), red margin line, dog-eared corner.
+   The drop-shadow filter follows the clipped corner where box-shadow can't. */
 .gb-style-paper {
-  background: #fdf6e3;
-  color: #4a3f2a;
-  border: 1px dashed #b5a67e;
+  background: linear-gradient(
+      90deg,
+      transparent 2.1rem,
+      rgba(205, 100, 88, 0.45) 2.1rem calc(2.1rem + 1px),
+      transparent calc(2.1rem + 1px)
+    ),
+    repeating-linear-gradient(to bottom, rgba(110, 140, 180, 0.3) 0 1px, transparent 1px 22.8px)
+      0 13px,
+    #fdf8e7;
+  color: #43391f;
   font-family: Georgia, "Times New Roman", serif;
+  border-radius: 0;
+  box-shadow: none;
+  clip-path: polygon(0 0, calc(100% - 1.2rem) 0, 100% 1.2rem, 100% 100%, 0 100%);
+  filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.2));
 }
 
-.gb-style-neon {
-  background: #0a0a12;
-  color: #00f0ff;
-  border: 1px solid #00f0ff;
-  text-shadow: 0 0 6px rgba(0, 240, 255, 0.6);
+/* The folded-down corner */
+.gb-style-paper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1.2rem;
+  height: 1.2rem;
+  background: linear-gradient(to bottom left, transparent 48%, #eadfb6 50%, #cbbd8e);
+}
+
+.gb-style-paper .gb-message {
+  padding-left: 1.5rem;
+  padding-right: 0.6rem;
+}
+
+.gb-style-paper .gb-meta {
+  padding-left: 1.5rem;
+  font-style: italic;
 }
 
 .gb-style-matcha {
-  background: #dce8d4;
-  color: #2f4526;
+  background: linear-gradient(165deg, #e9f1de, #cfe0bd);
+  color: #33502b;
+  border: 1px solid #a9c48f;
 }
 
-/* Vibe styles: typography + texture, not just colors */
-
 .gb-style-sticky {
-  background: #fef3a0;
+  background: linear-gradient(180deg, #fff4a8, #ffe269);
   color: #4a3b00;
-  font-family: "Comic Sans MS", "Segoe Print", cursive;
+  font-family: "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
   transform: rotate(-1.5deg);
   box-shadow: 3px 5px 10px rgba(0, 0, 0, 0.25);
   border-radius: 0;
+  padding-top: 1.5rem;
+}
+
+.gb-entries li:nth-child(even).gb-style-sticky {
+  transform: rotate(1.2deg);
+}
+
+/* Tape strip holding the note up */
+.gb-style-sticky::before {
+  content: "";
+  position: absolute;
+  top: 0.3rem;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 3.4rem;
+  height: 0.85rem;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
 }
 
 .gb-style-postcard {
   background: #fffdf7;
   color: #2b3a55;
-  font-family: "Segoe Script", "Comic Sans MS", cursive;
+  font-family: "Segoe Script", "Bradley Hand", "Comic Sans MS", cursive;
   border: 6px solid;
   border-image: repeating-linear-gradient(
       45deg,
@@ -259,7 +358,31 @@
   border-radius: 0;
 }
 
+/* Stamp in the corner; the message wraps short of it */
+.gb-style-postcard::after {
+  content: "✈";
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  width: 1.9rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+  font-size: 1rem;
+  color: #3a5da8;
+  background: #fff;
+  border: 1px dashed #9fadd0;
+  transform: rotate(3deg);
+}
+
+.gb-style-postcard .gb-message {
+  padding-right: 2.6rem;
+}
+
 .gb-style-win95 {
+  --gb-lines: 4;
   background: #c0c0c0;
   color: #000;
   font-family: Tahoma, "MS Sans Serif", sans-serif;
@@ -267,10 +390,47 @@
   border-width: 2px;
   border-color: #fff #808080 #808080 #fff;
   border-radius: 0;
+  padding-top: 2.4rem;
+}
+
+.gb-style-win95::before {
+  content: "message.txt";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  height: 1.3rem;
+  display: flex;
+  align-items: center;
+  padding: 0 0.4rem;
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.gb-style-win95::after {
+  content: "✕";
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 0.95rem;
+  height: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #c0c0c0;
+  color: #000;
+  font-size: 0.55rem;
+  border: 1px outset #fff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
 }
 
 .gb-style-newsprint {
-  background: #f4f1e8;
+  --gb-lines: 4;
+  background: #f6f2e6;
   color: #1a1a1a;
   font-family: Georgia, "Times New Roman", serif;
   border-top: 3px double #1a1a1a;
@@ -278,24 +438,164 @@
   border-radius: 0;
 }
 
-.gb-style-newsprint .gb-message::first-letter {
-  float: left;
-  font-size: 2.6em;
-  line-height: 0.8;
-  padding-right: 0.1em;
-  font-weight: bold;
+.gb-style-newsprint::before {
+  content: "— The Daily Guest —";
+  display: block;
+  text-align: center;
+  font-variant: small-caps;
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  border-bottom: 1px solid rgba(26, 26, 26, 0.35);
+  padding-bottom: 0.2rem;
+  margin-bottom: 0.45rem;
+}
+
+.gb-style-newsprint .gb-meta {
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
 }
 
 .gb-style-blueprint {
-  background: #10305e;
-  background-image: repeating-linear-gradient(
+  background: repeating-linear-gradient(
       0deg,
-      rgba(160, 200, 255, 0.15) 0 1px,
+      rgba(160, 200, 255, 0.14) 0 1px,
       transparent 1px 1rem
     ),
-    repeating-linear-gradient(90deg, rgba(160, 200, 255, 0.15) 0 1px, transparent 1px 1rem);
+    repeating-linear-gradient(90deg, rgba(160, 200, 255, 0.14) 0 1px, transparent 1px 1rem),
+    #10305e;
   color: #d6e8ff;
-  font-family: monospace;
-  border: 1px dashed rgba(214, 232, 255, 0.6);
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  border: 1px solid rgba(214, 232, 255, 0.75);
+  outline: 1px dashed rgba(214, 232, 255, 0.4);
+  outline-offset: -6px;
   border-radius: 0;
+}
+
+.gb-style-blueprint .gb-meta {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.7rem;
+}
+
+.gb-style-gameboy {
+  background: repeating-linear-gradient(0deg, rgba(15, 56, 15, 0.07) 0 2px, transparent 2px 4px),
+    #9bbc0f;
+  color: #0f380f;
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-weight: 600;
+  border: 4px solid #306230;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 2px #8bac0f;
+}
+
+.gb-style-gameboy .gb-message::before {
+  content: "▶ ";
+}
+
+.gb-style-polaroid {
+  --gb-lines: 4;
+  background: #fbfaf6;
+  color: #f2f5fb;
+  border-radius: 2px;
+  padding: 1.05rem 1.05rem 0.85rem;
+  transform: rotate(1.3deg);
+  box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.28);
+}
+
+.gb-entries li:nth-child(even).gb-style-polaroid {
+  transform: rotate(-1.1deg);
+}
+
+/* The "photo": a fixed dusk-sky pane behind the message. The pane is a
+   pseudo-element and the message keeps zero padding, inset by margins —
+   padding inside a line-clamped box lets clipped lines paint through it. */
+.gb-style-polaroid::before {
+  content: "";
+  position: absolute;
+  inset: 0.55rem 0.55rem 2.6rem;
+  background: linear-gradient(160deg, #8195bb 0%, #55648c 60%, #3d4a6e 100%);
+  box-shadow: inset 0 0 8px rgba(15, 20, 40, 0.35);
+}
+
+.gb-style-polaroid .gb-message {
+  position: relative;
+  margin: 0.3rem 0.55rem 1.1rem;
+  text-shadow: 0 1px 2px rgba(20, 25, 45, 0.5);
+}
+
+.gb-style-polaroid .gb-meta {
+  color: #44403a;
+  font-family: "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+  opacity: 1;
+}
+
+.gb-style-receipt {
+  --gb-lines: 4;
+  background: #fcfcf6;
+  color: #26241f;
+  font-family: ui-monospace, "Courier New", monospace;
+  font-size: 0.95em;
+  border-radius: 0;
+  box-shadow: none;
+  padding-bottom: 1.3rem;
+  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg)
+    50% / 0.9rem 100%;
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg)
+    50% / 0.9rem 100%;
+}
+
+.gb-style-receipt::before {
+  content: "· · · guest receipt · · ·";
+  display: block;
+  text-align: center;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  border-bottom: 1px dashed #a9a493;
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.4rem;
+}
+
+.gb-style-chalkboard {
+  background: radial-gradient(ellipse 80% 60% at 25% 20%, rgba(255, 255, 255, 0.07), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 80% 85%, rgba(255, 255, 255, 0.055), transparent 60%),
+    #2a3a31;
+  color: #f2f2e7;
+  font-family: "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+  border: 5px solid #7a512e;
+  border-radius: 3px;
+  text-shadow: 0 0 2px rgba(242, 242, 231, 0.4);
+}
+
+.gb-style-mixtape {
+  --gb-lines: 4;
+  background: #f6f0dd;
+  color: #3a3428;
+  font-family: "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+  border: 1px solid #d5cbab;
+  border-radius: 4px;
+}
+
+.gb-style-mixtape::before {
+  content: "SIDE A ♪";
+  display: block;
+  font-family: ui-monospace, "Courier New", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: #6b6250;
+  background: linear-gradient(
+      90deg,
+      #e74c3c 0 22%,
+      #f39c12 22% 44%,
+      #16a085 44% 66%,
+      #2980b9 66% 88%,
+      transparent 88%
+    )
+    left bottom / 100% 3px no-repeat;
+  padding-bottom: 0.45rem;
+  margin-bottom: 0.45rem;
+}
+
+.gb-style-mixtape .gb-meta {
+  font-family: ui-monospace, "Courier New", monospace;
 }
