@@ -1,10 +1,13 @@
 /* -- Guestbook -- */
 
-/* One source of truth for layout width and card width, shared by the
-   composer, the preview card and the entry grid so sizes always match. */
-:root {
-  --gb-w: min(64rem, 92vw);
-  --gb-card: calc((var(--gb-w) - 2rem) / 3);
+/* Blowfish keeps article text in a narrow prose column hugging the left edge
+   of the centred page body, so centring on the column is not centring on the
+   page. On pages with a guestbook, open the theme's two width clamps (the
+   .max-w-fit wrapper and .article-content) up to the full body width so the
+   guestbook centres on the page and scales with it. */
+article :is(.max-w-fit, .article-content):has(.gb-composer) {
+  width: 100%;
+  max-width: 100%;
 }
 
 /* Honeypot: offscreen but present in the DOM (bots skip display:none more often) */
@@ -47,10 +50,11 @@
 }
 
 /* Composer: form and live preview side by side, stacking on narrow screens.
-   Preview column is exactly one card wide; the form takes the rest. */
+   Preview column is exactly one entry-grid card wide — (100% - 2 × 1rem gap) / 3,
+   same formula as the 3-column grid below — so sizes always match. */
 .gb-composer {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) var(--gb-card);
+  grid-template-columns: minmax(0, 1fr) calc((100% - 2rem) / 3);
   gap: 1.5rem;
   align-items: start;
   margin-bottom: 2rem;
@@ -64,22 +68,17 @@
   margin: 0.5rem 0;
 }
 
-/* Preview card: single column, sized like a real grid card and held there */
+/* Preview card: single column, filling the card-sized preview pane */
 .gb-entries.gb-preview-list {
   grid-template-columns: 1fr;
 }
 
-.gb-preview-list .gb-entry {
-  width: var(--gb-card);
-  max-width: 100%;
-}
-
-/* Composer, entries and pager all break out of the narrow article text column */
+/* Composer, entries and pager share one width, centred on the page */
 .gb-composer,
 #gb-entries,
 #gb-pager {
-  width: var(--gb-w);
-  margin-left: calc(50% - var(--gb-w) / 2);
+  max-width: 64rem;
+  margin-inline: auto;
 }
 
 /* Entries: 3 columns × 4 rows per 12-entry page */
@@ -93,10 +92,6 @@
 }
 
 @media (max-width: 64rem) {
-  :root {
-    --gb-card: calc((var(--gb-w) - 1rem) / 2);
-  }
-
   .gb-entries {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -104,15 +99,20 @@
   .gb-composer {
     grid-template-columns: 1fr;
   }
+
+  /* Stacked composer: preview card sized like a 2-column entry card */
+  .gb-preview-list .gb-entry {
+    width: calc((100% - 1rem) / 2);
+  }
 }
 
 @media (max-width: 36rem) {
-  :root {
-    --gb-card: var(--gb-w);
-  }
-
   .gb-entries {
     grid-template-columns: 1fr;
+  }
+
+  .gb-preview-list .gb-entry {
+    width: 100%;
   }
 }
 
